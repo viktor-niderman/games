@@ -17,25 +17,25 @@
     <div id="app">
       <table id="table">
         <tr>
-          <td @click="one_m"  v-cloak>{{one}}</td>
-          <td @click="two_m"  v-cloak>{{two}}</td>
-          <td @click="three_m"  v-cloak>{{three}}</td>
+          <td @click="clickTo(1)"  v-cloak>{{pole[1]}}</td>
+          <td @click="clickTo(2)"  v-cloak>{{pole[2]}}</td>
+          <td @click="clickTo(3)"  v-cloak>{{pole[3]}}</td>
         </tr>
         <tr>
-          <td @click="four_m"   v-cloak>{{four}}</td>
-          <td @click="five_m"   v-cloak>{{five}}</td>
-          <td @click="six_m"   v-cloak>{{six}}</td>
+          <td @click="clickTo(4)"   v-cloak>{{pole[4]}}</td>
+          <td @click="clickTo(5)"   v-cloak>{{pole[5]}}</td>
+          <td @click="clickTo(6)"   v-cloak>{{pole[6]}}</td>
         </tr>
         <tr>
-          <td @click="seven_m"   v-cloak>{{seven}}</td>
-          <td @click="eight_m"   v-cloak>{{eight}}</td>
-          <td @click="nine_m"   v-cloak>{{nine}}</td>
+          <td @click="clickTo(7)"   v-cloak>{{pole[7]}}</td>
+          <td @click="clickTo(8)"   v-cloak>{{pole[8]}}</td>
+          <td @click="clickTo(9)"   v-cloak>{{pole[9]}}</td>
         </tr>
       </table>
     </div>
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+
+    <script src="../../libs/vue.js"></script>
     <script src="js.js"></script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
