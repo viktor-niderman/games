@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+            color: #fae900;
+        }
+        canvas{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="1000" height="600"></canvas>
+
+    <script>
+        function rand(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+        }
+
+        play = true;
+        count = 0;
+
+        ctx = canvas.getContext('2d');
+        w = canvas.width;
+        h = canvas.height;
+
+        char = {
+            x: 10,
+            y: 400,
+            w: 60,
+            h : 100,
+            speed: 5,
+            move_left: false,
+            move_right: false,
+            move_up: false,
+            move_down: false,
+            jump: false,
+            jump_up: false,
+            jump_down: false
+        }
+
+        class ENEMY {
+            x = w-20;
+            y;
+            constructor(){
+                let r = rand(0,3)
+                if(r == 0) this.y = 480;
+                if(r == 1) this.y = 420;
+                if(r == 2) this.y = 360;
+                if(r == 3) this.y = 300;
+
+                r = rand(w-20, w+4000)
+                this.x = r
+            }
+        }
+
+        //генерация врагов
+        enemy = []
+        for(i=0; i<10; i++)
+            enemy[i] = new ENEMY()
+
+        
+            setInterval(() => {
+                count += 100;
+            }, 1000);
+
+        function step(){
+            //фон
+            ctx.fillStyle = '#65afda';
+            ctx.fillRect(0,0,w,h);
+
+            ctx.fillStyle = '#fae900';
+            ctx.beginPath();
+            ctx.arc(800,100,50,0,Math.PI*2,true);
+            ctx.fill();
+
+            //счет
+            ctx.font = "30px Arial";
+            ctx.strokeText(count, 30, 50);
+            
+
+            //земля
+            ctx.fillStyle = '#886608';
+            ctx.fillRect(0,500,w,100);
+
+            //движение
+            if(char.move_left == true && char.x >= 10) 
+                char.x-=char.speed
+            if(char.move_right == true && char.x <= w-10-char.w) 
+                char.x+=char.speed
+            if(char.move_up == true){
+                char.jump = true
+                char.jump_up = true
+            }
+                
+
+            //прыжок
+            if(char.jump_up == true){
+                char.y-=4;
+                if(char.y == 200) {
+                    char.jump_up = false;
+                    char.jump_down = true;
+                    char.move_up = false;
+                }
+            }
+            if(char.jump_down == true){
+                char.y+=4;
+                if(char.y == 400){
+                    char.jump_down = false;
+                    char.jump = false;
+                }    
+            }
+
+            //враги
+            ctx.fillStyle = '#AA00da';
+            for(i=0; i<10; i++){
+                enemy[i].x-=3;
+                if(enemy[i].x <0 ){
+                    delete enemy[i];
+                    enemy[i] = new ENEMY();
+                }
+                ctx.fillRect(enemy[i].x,enemy[i].y,20,20);
+
+                if(enemy[i].x < char.x+char.w
+                && enemy[i].x+20 > char.x 
+                && enemy[i].y+20 > char.y
+                && enemy[i].y < char.y+char.h) {
+                    play = false
+                    break;
+                } 
+                 
+            }
+
+            
+            //персонаж
+            ctx.fillStyle = '#1f4d01';
+            ctx.fillRect(char.x,char.y,char.w,char.h);
+
+            if(play == true)
+                requestAnimationFrame(step);
+            else{
+                ctx.font = "60px Comic Sans MS";
+                ctx.fillStyle = "red";
+                ctx.textAlign = "center";
+                ctx.fillText("Game over", canvas.width/2, canvas.height/2);
+                
+            }
+        }
+        step();
+
+
+        document.addEventListener("keydown", e => {
+        //alert(e.key)
+        if (e.key == "ф" || e.key == "a") char.move_left = true;
+        if (e.key == "в" || e.key == "d") char.move_right = true;
+        if ((e.key == "ы" || e.key == "s") && char.jump == false) {
+            char.move_down = true;
+            char.h = 50;
+            char.y = 450;
+        } 
+        if ((e.key == "ц" || e.key == "w") && char.jump == false) char.move_up = true;
+        });
+
+      document.addEventListener("keyup", e => {
+        //alert(e.key)
+        if (e.key == "ф" || e.key == "a") char.move_left = false;
+        if (e.key == "в" || e.key == "d") char.move_right = false;
+        if (e.key == "ы" || e.key == "s"  && char.jump == false) {
+            char.move_down = false;
+            char.h = 100;
+            char.y = 400;
+        } 
+        if (e.key == "ц" || e.key == "w") char.move_up = false;
+        });
+    </script>
+</body>
+</html>

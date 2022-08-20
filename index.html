@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <script src="libs/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="container">
+        <header class="text-center">
+            <h1>Just little games that I used to make for fun and learning.</h1>
+        </header>
+        <main>
+            <div class="d-flex flex-wrap justify-content-center">
+                <div class="card m-2" style="width: 18rem;" v-for="gameCard in gameCards">
+                    <img :src="gameCard.img" class="card-img-top" :alt="gameCard.title">
+                    <div class="card-body">
+                        <h5 class="card-title">{{gameCard.title}}</h5>
+                        <p class="card-text">{{gameCard.description}}</p>
+                        <a :href="`/games/${gameCard.link}/index.html`" class="btn btn-primary">Go Game</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+
+<script>
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                gameCards: [
+                    {
+                        img: '',
+                        title: '',
+                        description: '',
+                        link: '',
+                    },
+                    {
+                        img: '',
+                        title: '',
+                        description: '',
+                        link: '',
+                    },
+                    {
+                        img: '',
+                        title: '',
+                        description: '',
+                        link: '',
+                    },
+                    {
+                        img: '',
+                        title: '',
+                        description: '',
+                        link: '',
+                    },
+                    {
+                        img: '',
+                        title: '',
+                        description: '',
+                        link: '',
+                    },
+                    {
+                        img: '',
+                        title: '',
+                        description: '',
+                        link: '3BarleyBreak',
+                    },
+                ]
+            }
+        }
+    }).mount('#app')
+</script>
+</body>
+</html>

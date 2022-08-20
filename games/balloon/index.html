@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      canvas {
+        border: 10px solid #383954;
+      }
+      #game {
+        border: 5px solid #2b7ea3;
+        width: 620px;
+        height: 820px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <canvas id="canvas" width="600" height="800"></canvas>
+    </div>
+    <script>
+      function rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+      }
+
+      var ctx = canvas.getContext("2d");
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+
+      speed = 8;
+      var i_balloon = []
+      i_balloon[0] = new Image();
+      i_balloon[0].src = "green.png";
+      i_balloon[1] = new Image();
+      i_balloon[1].src = "blue.png";
+      i_balloon[2] = new Image();
+      i_balloon[2].src = "purp.png";
+      i_balloon[3] = new Image();
+      i_balloon[3].src = "red.png";
+      i_balloon[4] = new Image();
+      i_balloon[4].src = "yellow.png";
+
+
+      var sound = document.createElement('audio');
+      sound.src = 'sound.mp3';
+      sound.volume = 0.4;
+      mute = false;
+
+
+      class ballon {
+        x;
+        y;
+        color;
+        is = true;
+        speed;
+        constructor(X, Y) {
+          this.x = X;
+          this.y = Y;
+          this.color = rand(0,4);
+          this.speed = rand(2,6)
+        }
+      }
+
+      b = [];
+      b_count = 0;
+
+      //генерация новых шариков
+      function new_balloon() {
+        b[b_count] = new ballon(rand(0, 500), 800);
+        b_count++;
+        setTimeout(() => {
+          new_balloon();
+        }, rand(500, 2000));
+      }
+      new_balloon();
+
+      function step() {
+        //задний фон
+        ctx.fillStyle = "#304F6B";
+        ctx.fillRect(0, 0, w, h);
+
+        //рисование шарика
+        for (i = 0; i < b_count; i++) {
+            if(b[i] != undefined &&  b[i].is == true)
+                ctx.drawImage(i_balloon[b[i].color], b[i].x, b[i].y, 100, 120);
+        }
+
+        //движение шарика
+        for (i = 0; i < b_count; i++) {
+            if(b[i] != undefined){
+                b[i].y -= b[i].speed;
+
+                if(b[i].y < -120) {
+                    b[i].is = false;
+                    delete b[i]
+                }
+            }
+          
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      step();
+
+      //нажатия мышкой
+      let offsetLeft = canvas.offsetLeft;
+      let offsetTop = canvas.offsetTop;
+      document.addEventListener("mouseup", mouseMoveHandler, false);
+      function mouseMoveHandler(e) {
+        var X = e.clientX - offsetLeft;
+        var Y = e.clientY - offsetTop;
+        X = (X / w) * w-10;
+        Y = (Y / h) * h-10;
+
+        for (i = 0; i < b_count; i++) {
+            if (b[i] != undefined && X > b[i].x && X < (b[i].x)+100 && Y > b[i].y && Y < (b[i].y)+150){
+                b[i].is = false;
+                delete b[i];
+                sound.play();
+                break;
+            }
+        }
+
+        /*
+        //звук
+        if (X > 0 && X < 50 && Y > 0 && Y < 75) {
+          mute = !mute;
+          if (mute) {
+            sound.src = "audio/fon.mp3";
+            sound.play();
+          } else sound.pause();
+        }
+        //смена фона
+        if (X > 0 && X < 50 && Y > 75 && Y < 150) {
+          n_f++;
+          if (n_f == 3) n_f = 0;
+          I_back.src = "img/fon/" + n_f + ".png";
+        }
+        */
+      }
+    </script>
+  </body>
+</html>
