@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Snake</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <style>
-        canvas{
-            border: 1px solid rgb(180, 115, 9);
+        html {
+            background-color: rgb(247, 247, 247);
         }
     </style>
 </head>
@@ -15,168 +16,11 @@
     <canvas id="canvas"></canvas>
 
     <br>
-    <input type="number" min="100" max="2000" step="50" value="600" id="inp_w"> Ширина<br><br>
-    <input type="number" min="100" max="2000" step="50" value="600" id="inp_h"> Высота<br><br>
-    <input type="number" min="10" max="100" step="5" value="20"  id="inp_s"> Размер клетки<br><br>
-    <input type="number" min="1" max="20" step="1" value="5"  id="inp_f"> Сколько фруктов?<br><br>
-    <button onclick="reload()">Перезапустить</button>
-    <script>
-        //ЗНАЧЕНИЯ ЗАДАННЫЕ ПОЛЬЗОВАТЕЛЕМ
-        if(localStorage.getItem('w') != undefined){
-            inp_w.value = localStorage.getItem('w');
-            inp_h.value = localStorage.getItem('h');
-            inp_s.value = localStorage.getItem('s');
-            inp_f.value = localStorage.getItem('f');
-        }
-        function reload(){
-            localStorage.setItem('w', inp_w.value);
-            localStorage.setItem('h', inp_h.value);
-            localStorage.setItem('s', inp_s.value);
-            localStorage.setItem('f', inp_f.value);
-            document.location.reload(true);
-        }
-        //ФУНКЦИЯ РАНДОМА
-        function rand(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
-        }
-        //ПЕРЕМЕННЫЕ
-        let size = Number(inp_s.value); //размер клеток (20 по умолчанию)
-        canvas.width = inp_w.value;
-        canvas.height = inp_h.value;
-
-        const ctx = canvas.getContext('2d');
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
-
-        //ИЗОБРАЖЕНИЯ
-        const img_fruit = new Image();
-        img_fruit.src = 'fruit.png';
-        const img_skin = new Image();
-        img_skin.src = 'skin.jpg';
-
-        //ПЕРСОНАЖ
-        let char = {
-            x:0,
-            y:0,
-            move: 'right',
-            tail_x: [],
-            tail_y: [],
-            change_move: false //что бы избежать повторной смены направления
-        }
-
-        //ЕДА
-        class FOOD {
-            x;
-            y;
-            constructor(){
-                this.change();
-            }
-            change(){
-                let r = rand(0, (w-size)/size);
-                this.x = r*size;
-                r = rand(0, (h-size)/size);
-                this.y = r*size;
-            }
-        }
-        //генерация еды
-        let food = [];
-        count_food = inp_f.value;
-        for(i=0;i<count_food;i++)
-            food[i] = new FOOD();
-
-        //НАЧАЛО ИГРЫ
-        function step(){
-            //ИГРОВОЕ ПОЛЕ
-            for(i=0; i<h/size; i++){
-                for(j=0; j<w/size;j++){
-                    if(j%2 + i%2 == 1){
-                        ctx.fillStyle = 'rgba(3, 68, 17, 0.6)';
-                        ctx.fillRect(j*size,i*size,size,size); 
-                    }
-                    else{
-                        ctx.fillStyle = 'rgba(30, 88, 17, 0.6)';
-                        ctx.fillRect(j*size,i*size,size,size); 
-                    }
-                }
-            }
-
-            //ЗМЕЙКА (голова)
-            ctx.fillStyle = 'rgb(130, 0, 0)';
-            ctx.beginPath();
-            ctx.arc(char.x+size/2,char.y+size/2,size/2,0,Math.PI*2)
-            ctx.fill();
-            //хвост
-            ctx.fillStyle = 'rgb(207, 143, 40)';
-            for(i=0;i<char.tail_x.length;i++){
-                ctx.drawImage(img_skin, char.tail_x[i],char.tail_y[i],size,size)
-            }
-
-            //ЕДА
-            for(i=0; i<food.length; i++){
-                ctx.drawImage(img_fruit, food[i].x,food[i].y,size,size)
-            }
-            
-            //ПОЕДАНИЕ
-            for(i=0; i<food.length; i++){
-                if(char.x == food[i].x && char.y == food[i].y){
-                    eat = true;
-                    food[i].change();
-                    char.tail_x.push(char.x);
-                    char.tail_y.push(char.y);
-                    char.tail_move = char.move;
-                }
-            }
-
-            //ПЕРЕДВИЖЕНИЕ ХВОСТА
-            for(i=char.tail_x.length-1; i>=0; i--){
-                if(i==0){
-                    char.tail_x[i] = char.x;
-                    char.tail_y[i] = char.y;
-                }
-                else{
-                    char.tail_x[i] = char.tail_x[i-1];
-                    char.tail_y[i] = char.tail_y[i-1];
-                }
-                    
-            }
-
-            //ПЕРЕДВИЖЕНИЕ ЗМЕЙКИ
-            if(char.move == 'left') char.x-=size;
-            if(char.move == 'right') char.x+=size;
-            if(char.move == 'up') char.y-=size;
-            if(char.move == 'down') char.y+=size;
-
-            //СМЕРТЬ
-            for(i=0;i<char.tail_x.length;i++){
-                if(char.tail_x[i]== char.x && char.tail_y[i] == char.y)
-                    alert('dead');
-            }
-
-            //СТЕНКИ
-            if(char.x == w) char.x = 0;
-            if(char.x == 0-size) char.x = w-size;
-            if(char.y == h) char.y = 0;
-            if(char.y == 0-size) char.y = h-size;
-
-            char.change_move = false;   //разрешения изменять направление
-
-            setTimeout(() => {
-                requestAnimationFrame(step);
-            }, 70);
-        }
-
-        step();
-
-        //ОБРАБОТКА НАЖАТИЙ
-        document.addEventListener("keydown", e => {
-            if(!char.change_move){
-                if ((e.key == "ArrowLeft"    || e.key == "a" || e.key == "ф") && char.move != 'right') char.move = "left";
-                if ((e.key == "ArrowRight"   || e.key == "d" || e.key == "в") && char.move != 'left') char.move = "right";
-                if ((e.key == "ArrowDown"    || e.key == "s" || e.key == "ы") && char.move != 'up') char.move = "down";
-                if ((e.key == "ArrowUp"      || e.key == "w" || e.key == "ц") && char.move != 'down') char.move = "up";
-                char.change_move = true;
-            }
-      });
-    </script>
+    <input type="number" min="100" max="2000" step="100" value="600" id="input_width"> Ширина<br><br>
+    <input type="number" min="100" max="2000" step="100" value="600" id="input_height"> Высота<br><br>
+    <input type="number" min="10" max="100" step="10" value="20"  id="input_count_cell">Колличество клеток<br><br>
+    <input type="number" min="1" max="20" step="1" value="5"  id="input_count_food"> Сколько фруктов?<br><br>
+    <button class="btn btn-info" onclick="reload()">Перезапустить</button>
+    <script src="js/index.js"></script>
 </body>
 </html>
