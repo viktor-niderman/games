@@ -1,103 +1,86 @@
 const { createApp } = Vue
-
 createApp({
     data() {
         return {
-            pole: [],
+            field: [],
             combinations: [
                 [1,2,3], [4,5,6], [7,8,9],
                 [1,4,7], [2,5,8], [3,6,9],
                 [1,5,9], [3,5,7],
             ],
-            reload: false,
+            appIsReload: false,
+            symbols: {
+                player: 'X',
+                pc: '◯',
+            }
         }
     },
     methods: {
         getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
             return Math.floor(Math.random() * (max - min + 1) + min);
         },
-        trySetCircleToCell(p1, p2, undef, symbol) {
-            if(this.pole[p1] === symbol && this.pole[p2] === symbol && this.pole[undef] === undefined){
-                this.pole[undef] = '◯';
-                return true;
+        trySetCircleToCellToLine(p1, p2, p3, symbol) {
+            if ([p1, p2, p3].filter(el => this.field[el] === symbol).length === 2) {
+                let undef = [p1, p2, p3].find(el => this.field[el] === undefined);
+                if (undef) {
+                    this.field[undef] = this.symbols.pc;
+                    return true;
+                }
             }
             return false;
         },
-        trySetCircleToCellToLine(one, two, three, symbol) {
-            if (this.trySetCircleToCell(one, two, three, symbol)) return true;
-            if (this.trySetCircleToCell(one, three, two, symbol)) return true;
-            if (this.trySetCircleToCell(two, three, one, symbol)) return true;
-            return false;
-        },
-        clickTo(n) {
-            if (this.reload !== false) return;
-            if (this.pole[n] !== undefined) return;
-            this.pole[n] = "X";
-            if (this.checkWin('X')) return;
-            if(this.pole.filter(v => v !== undefined).length >= 9) {
-                alert('Draw');
-                this.pole = [];
-                return;
-            }
-            let success = false;
+        trySetCircleFor(symbol) {
             for (let i = 0; i < this.combinations.length; i++) {
                 if (this.trySetCircleToCellToLine(
                     this.combinations[i][0],
                     this.combinations[i][1],
                     this.combinations[i][2],
-                    "◯"
+                    symbol
                 )) {
-                    success = true;
-                    break;
-                }
-            }
-            if (!success) {
-                for (let i = 0; i < this.combinations.length; i++) {
-                    if (this.trySetCircleToCellToLine(
-                        this.combinations[i][0],
-                        this.combinations[i][1],
-                        this.combinations[i][2],
-                        "X"
-                    )) {
-                        success = true;
-                        break;
-                    }
-                }
-            }
-            if (!success) {
-                while (1) {
-                    let q = this.getRandomInt(1,9);
-                    if (this.pole[q] !== undefined) continue;
-                    this.pole[q] = '◯';
-                    break;
-                }
-            }
-            this.checkWin('◯');
-        },
-        checkWin(symbol){
-            for (let i = 0; i < this.combinations.length; i++) {
-                if (this.pole[this.combinations[i][0]] === symbol
-                    && this.pole[this.combinations[i][1]] === symbol
-                    && this.pole[this.combinations[i][2]] === symbol
-                ) {
-                    console.log(
-                        this.combinations[i],
-                        this.pole[this.combinations[i][0]],
-                        this.pole[this.combinations[i][1]],
-                        this.pole[this.combinations[i][2]],
-                        symbol
-                        )
-                    alert ('The winner is: ' + symbol);
-                    this.reload = true;
-                    setTimeout(() => {
-                        this.pole = [];
-                        this.reload = false;
-                    }, 1000)
                     return true;
                 }
             }
+            return false;
+        },
+        makeCircleInRandomPlace() {
+            while (1) {
+                let q = this.getRandomInt(1,9);
+                if (this.field[q] !== undefined) continue;
+                this.field[q] = this.symbols.pc;
+                break;
+            }
+        },
+        clickTo(n) {
+            if (this.appIsReload || this.field[n]) return;
+            this.field[n] = this.symbols.player;
+            if (this.checkWin(this.symbols.player)) return;
+            if(this.field.filter(v => v !== undefined).length >= 9) {
+                this.stopGame('Draw');
+                return;
+            }
+            this.trySetCircleFor(this.symbols.pc) || this.trySetCircleFor(this.symbols.player) || this.makeCircleInRandomPlace();
+            this.checkWin(this.symbols.pc);
+        },
+        checkWin(symbol){
+            for (let i = 0; i < this.combinations.length; i++) {
+                if (this.field[this.combinations[i][0]] === symbol
+                    && this.field[this.combinations[i][1]] === symbol
+                    && this.field[this.combinations[i][2]] === symbol
+                ) {
+                    this.stopGame('The winner is: ' + symbol);
+                    return true;
+                }
+            }
+        },
+        stopGame(message) {
+            this.appIsReload = true;
+            setTimeout(() => {
+                alert (message);
+            }, 1)
+            setTimeout(() => {
+                this.field = [];
+                this.appIsReload = false;
+            }, 1000)
         }
     },
 }).mount('#app')

@@ -15,7 +15,7 @@
         <main>
             <div class="d-flex flex-wrap justify-content-center">
                 <div class="card m-2" style="width: 18rem;" v-for="gameCard in gameCards">
-                    <img :src="gameCard.img" class="card-img-top" :alt="gameCard.title">
+                    <img :src="`./games/${gameCard.link}/preview.png`" class="card-img-top" :alt="gameCard.title">
                     <div class="card-body">
                         <h5 class="card-title">{{gameCard.title}}</h5>
                         <p class="card-text">{{gameCard.description}}</p>
@@ -36,31 +36,26 @@
             return {
                 gameCards: [
                     {
-                        img: '',
                         title: 'ticTacToe',
                         description: '',
                         link: 'ticTacToe',
                     },
                     {
-                        img: '',
                         title: 'Snake',
                         description: '',
                         link: 'snake',
                     },
                     {
-                        img: '',
                         title: 'DinoChrome',
                         description: '',
                         link: 'dinoChrome',
                     },
                     {
-                        img: '',
                         title: 'Balloon',
                         description: '',
                         link: 'balloon',
                     },
                     {
-                        img: '',
                         title: 'BarleyBreak',
                         description: '',
                         link: 'barleyBreak',

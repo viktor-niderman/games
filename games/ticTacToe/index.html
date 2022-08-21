@@ -1,46 +1,35 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Крестики-нолики v2</title>
-    <!-- Required meta tags -->
+    <title>ticTacToe</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- <!-- Bootstrap CSS -->
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../libs/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-    
+    <script src="../../libs/vue.js"></script>
 
 </head>
   <body>
-    
     <div id="app">
       <table id="table">
         <tr>
-          <td @click="clickTo(1)"  v-cloak>{{pole[1]}}</td>
-          <td @click="clickTo(2)"  v-cloak>{{pole[2]}}</td>
-          <td @click="clickTo(3)"  v-cloak>{{pole[3]}}</td>
+          <td @click="clickTo(1)">{{field[1]}}</td>
+          <td @click="clickTo(2)">{{field[2]}}</td>
+          <td @click="clickTo(3)">{{field[3]}}</td>
         </tr>
         <tr>
-          <td @click="clickTo(4)"   v-cloak>{{pole[4]}}</td>
-          <td @click="clickTo(5)"   v-cloak>{{pole[5]}}</td>
-          <td @click="clickTo(6)"   v-cloak>{{pole[6]}}</td>
+          <td @click="clickTo(4)">{{field[4]}}</td>
+          <td @click="clickTo(5)">{{field[5]}}</td>
+          <td @click="clickTo(6)">{{field[6]}}</td>
         </tr>
         <tr>
-          <td @click="clickTo(7)"   v-cloak>{{pole[7]}}</td>
-          <td @click="clickTo(8)"   v-cloak>{{pole[8]}}</td>
-          <td @click="clickTo(9)"   v-cloak>{{pole[9]}}</td>
+          <td @click="clickTo(7)">{{field[7]}}</td>
+          <td @click="clickTo(8)">{{field[8]}}</td>
+          <td @click="clickTo(9)">{{field[9]}}</td>
         </tr>
       </table>
     </div>
 
-
-    <script src="../../libs/vue.js"></script>
     <script src="js.js"></script>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+</body>
 </html>
