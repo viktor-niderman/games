@@ -15,11 +15,13 @@
         <main>
             <div class="d-flex flex-wrap justify-content-center">
                 <div class="card m-2" style="width: 18rem;" v-for="gameCard in gameCards">
-                    <img :src="`./games/${gameCard.link}/preview.png`" class="card-img-top" :alt="gameCard.title">
+                    <img :src="`./games/${gameCard.link}/preview.png`" style="height: 16rem" class="card-img-top" :alt="gameCard.title">
                     <div class="card-body">
-                        <h5 class="card-title">{{gameCard.title}}</h5>
+                        <h5 class="card-title text-center">{{gameCard.title}}</h5>
                         <p class="card-text">{{gameCard.description}}</p>
-                        <a :href="`./games/${gameCard.link}/index.html`" class="btn btn-primary">Go Game</a>
+                        <div class="text-center">
+                            <a :href="`./games/${gameCard.link}/index.html`" class="btn btn-primary">Play</a>
+                        </div>
                     </div>
                 </div>
             </div>

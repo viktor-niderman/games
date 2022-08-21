@@ -1,34 +1,17 @@
-let input_width = document.querySelector('#input_width');
-let input_height = document.querySelector('#input_height');
-let input_count_cell = document.querySelector('#input_count_cell');
-let input_count_food = document.querySelector('#input_count_food');
-
-if (localStorage.getItem('snake_width') != undefined) {
-    input_width.value = localStorage.getItem('snake_width');
-    input_height.value = localStorage.getItem('snake_height');
-    input_count_cell.value = localStorage.getItem('snake_count_cell');
-    input_count_food.value = localStorage.getItem('snake_count_food');
-}
-
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
-canvas.width = Number(input_width.value)
-canvas.height = Number(input_height.value)
+canvas.width = 600;
+canvas.height = 600;
 
 const width = canvas.clientWidth;
 const height = canvas.clientHeight;
 
-let min_size = (Number(input_width.value) < Number(input_height.value)) ? Number(input_width.value) : Number(input_height.value);
-let size = min_size / Number(input_count_cell.value)
-let count_food = Number(input_count_food.value)
+let size = 600 / 20;
+let count_food = 5;
 
 
 function reload() {
-    localStorage.setItem('snake_width', input_width.value);
-    localStorage.setItem('snake_height', input_height.value);
-    localStorage.setItem('snake_count_cell', input_count_cell.value);
-    localStorage.setItem('snake_count_food', input_count_food.value);
-    document.location.reload(true);
+    document.location.reload();
 }
 
 function rand(min, max) {
@@ -74,10 +57,10 @@ let snake = {
             this.coordinates.y[i] = this.coordinates.y[i - 1];
         }
 
-        if (this.route == 'left')   this.coordinates.x[0]--;
-        if (this.route == 'right')  this.coordinates.x[0]++;
-        if (this.route == 'up')     this.coordinates.y[0]--;
-        if (this.route == 'down')   this.coordinates.y[0]++;
+        if (this.route === 'left')   this.coordinates.x[0]--;
+        if (this.route === 'right')  this.coordinates.x[0]++;
+        if (this.route === 'up')     this.coordinates.y[0]--;
+        if (this.route === 'down')   this.coordinates.y[0]++;
     }
 }
 snake.constructor();
@@ -108,7 +91,7 @@ function step() {
     //draw map
     for (let i = 0; i < Math.floor(height / size); i++) {
         for (let j = 0; j < Math.floor(width / size); j++) {
-            if (j % 2 + i % 2 == 1) {
+            if (j % 2 + i % 2 === 1) {
                 ctx.fillStyle = 'rgba(3, 68, 17, 0.6)';
             }
             else {
@@ -137,7 +120,7 @@ function step() {
 
     //eat
     for (let i = 0; i < food.length; i++) {
-        if (snake.coordinates.x[0] == food[i].coordinates.x && snake.coordinates.y[0] == food[i].coordinates.y) {
+        if (snake.coordinates.x[0] === food[i].coordinates.x && snake.coordinates.y[0] === food[i].coordinates.y) {
             food[i].change();
             snake.coordinates.x.push(snake.coordinates.x[0]);
             snake.coordinates.y.push(snake.coordinates.y[0]);
@@ -169,10 +152,10 @@ step();
 
 document.addEventListener("keydown", e => {
     if (snake.canChangeRoute) {
-        if ((e.code === "ArrowLeft" || e.code === "KeyA") && snake.route != 'right') snake.route = "left";
-        if ((e.code === "ArrowRight" || e.code === "KeyD") && snake.route != 'left') snake.route = "right";
-        if ((e.code === "ArrowDown" || e.code === "KeyS") && snake.route != 'up') snake.route = "down";
-        if ((e.code === "ArrowUp" || e.code === "KeyW") && snake.route != 'down') snake.route = "up";
+        if ((e.code === "ArrowLeft" || e.code === "KeyA") && snake.route !== 'right') snake.route = "left";
+        if ((e.code === "ArrowRight" || e.code === "KeyD") && snake.route !== 'left') snake.route = "right";
+        if ((e.code === "ArrowDown" || e.code === "KeyS") && snake.route !== 'up') snake.route = "down";
+        if ((e.code === "ArrowUp" || e.code === "KeyW") && snake.route !== 'down') snake.route = "up";
         snake.canChangeRoute = false;
     }
 });
