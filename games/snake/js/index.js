@@ -1,5 +1,6 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
+
 canvas.width = 600;
 canvas.height = 600;
 
@@ -9,31 +10,33 @@ const height = canvas.clientHeight;
 let size = 600 / 20;
 let count_food = 5;
 
-
-function reload() {
-    document.location.reload();
-}
+const img_food = new Image();
+img_food.src = './images/food.png';
 
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const img_food = new Image();
-img_food.src = './images/food.png';
+function reload() {
+    snake.create();
+}
 
 let snake = {
     coordinates: {
         x: [],
         y: [],
     },
-    route: 'right',
+    route: '',
     canChangeRoute: true,
     isAlive: true,
     colorHead: "rgb(130, 0, 0)",
-    colorTail: '#2eb9d4c9',
-    constructor() {
-        this.coordinates.x[0] = 0;
-        this.coordinates.y[0] = 0;
+    colorTail: 'rgba(239,237,43,0.79)',
+    create() {
+        this.coordinates.x = [0];
+        this.coordinates.y = [0];
+        this.route = 'right';
+        this.isAlive = true;
+        step();
     },
     checkCageIsOccupied(x, y) {
         for (let i = 1; i < this.coordinates.x.length; i++) {
@@ -63,7 +66,6 @@ let snake = {
         if (this.route === 'down')   this.coordinates.y[0]++;
     }
 }
-snake.constructor();
 
 class FOOD {
     coordinates = {
@@ -86,6 +88,8 @@ const food = [];
 for (let i = 0; i < count_food; i++) {
     food[i] = new FOOD();
 }
+
+snake.create();
 
 function step() {
     //draw map
@@ -129,12 +133,15 @@ function step() {
 
     snake.move()
 
-    snake.checkDeath()
-        
-    
+    let isDeath = snake.checkDeath();
+    if (isDeath) {
+        snake.isAlive = false;
+    }
+
 
     //wall
     if (snake.coordinates.x[0] >= Math.floor(width / size)) snake.coordinates.x[0] = 0;
+    if (snake.coordinates.x[0] < 0) snake.coordinates.x[0] = Math.floor(width / size) - 1;
     if (snake.coordinates.x[0] < 0) snake.coordinates.x[0] = Math.floor(width / size) - 1;
     if (snake.coordinates.y[0] >= Math.floor(height / size)) snake.coordinates.y[0] = 0;
     if (snake.coordinates.y[0] < 0) snake.coordinates.y[0] = Math.floor(height / size) - 1;
@@ -147,8 +154,6 @@ function step() {
         }, 70)
     }
 }
-
-step();
 
 document.addEventListener("keydown", e => {
     if (snake.canChangeRoute) {

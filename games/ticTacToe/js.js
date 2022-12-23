@@ -12,7 +12,8 @@ createApp({
             symbols: {
                 player: 'X',
                 pc: '◯',
-            }
+            },
+            canMakeStep: true,
         }
     },
     methods: {
@@ -51,6 +52,7 @@ createApp({
             }
         },
         clickTo(n) {
+            if (!this.canMakeStep) return;
             if (this.appIsReload || this.field[n]) return;
             this.field[n] = this.symbols.player;
             if (this.checkWin(this.symbols.player)) return;
@@ -58,8 +60,14 @@ createApp({
                 this.stopGame('Draw');
                 return;
             }
-            this.trySetCircleFor(this.symbols.pc) || this.trySetCircleFor(this.symbols.player) || this.makeCircleInRandomPlace();
-            this.checkWin(this.symbols.pc);
+            setTimeout(() => {
+                this.trySetCircleFor(this.symbols.pc) || this.trySetCircleFor(this.symbols.player) || this.makeCircleInRandomPlace();
+                setTimeout(() => {
+                    this.checkWin(this.symbols.pc);
+                    this.canMakeStep = true;
+                }, 100)
+            }, 300)
+
         },
         checkWin(symbol){
             for (let i = 0; i < this.combinations.length; i++) {
