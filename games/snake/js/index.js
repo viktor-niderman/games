@@ -18,7 +18,7 @@ function rand(min, max) {
 }
 
 function reload() {
-    snake.create();
+    snake.restart();
 }
 
 let snake = {
@@ -31,12 +31,19 @@ let snake = {
     isAlive: true,
     colorHead: "rgb(130, 0, 0)",
     colorTail: 'rgba(239,237,43,0.79)',
+    timeout: null,
+    speed: null,
     create() {
         this.coordinates.x = [0];
         this.coordinates.y = [0];
         this.route = 'right';
         this.isAlive = true;
+        this.speed = 70;
         step();
+    },
+    restart() {
+      clearTimeout(this.timeout);
+      snake.create();
     },
     checkCageIsOccupied(x, y) {
         for (let i = 1; i < this.coordinates.x.length; i++) {
@@ -149,9 +156,12 @@ function step() {
     snake.canChangeRoute = true;
 
     if (snake.isAlive) {
-        setTimeout(() => {
+        snake.timeout = setTimeout(() => {
             requestAnimationFrame(step);
-        }, 70)
+            if (snake.speed > 30 && rand(0,60) === 0) {
+              snake.speed--;
+            }
+        }, snake.speed)
     }
 }
 
