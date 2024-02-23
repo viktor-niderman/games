@@ -11,25 +11,26 @@
 </head>
   <body>
     <div id="app">
-      <table id="table">
-        <tr>
-          <td @click="clickTo(1)">{{field[1]}}</td>
-          <td @click="clickTo(2)">{{field[2]}}</td>
-          <td @click="clickTo(3)">{{field[3]}}</td>
-        </tr>
-        <tr>
-          <td @click="clickTo(4)">{{field[4]}}</td>
-          <td @click="clickTo(5)">{{field[5]}}</td>
-          <td @click="clickTo(6)">{{field[6]}}</td>
-        </tr>
-        <tr>
-          <td @click="clickTo(7)">{{field[7]}}</td>
-          <td @click="clickTo(8)">{{field[8]}}</td>
-          <td @click="clickTo(9)">{{field[9]}}</td>
-        </tr>
-      </table>
+      <div id="game">
+        <div class="game-row">
+          <div @click="clickTo(1)">{{field[1]}}</div>
+          <div @click="clickTo(2)">{{field[2]}}</div>
+          <div @click="clickTo(3)">{{field[3]}}</div>
+        </div>
+        <div class="game-row">
+          <div @click="clickTo(4)">{{field[4]}}</div>
+          <div @click="clickTo(5)">{{field[5]}}</div>
+          <div @click="clickTo(6)">{{field[6]}}</div>
+        </div>
+        <div class="game-row">
+          <div @click="clickTo(7)">{{field[7]}}</div>
+          <div @click="clickTo(8)">{{field[8]}}</div>
+          <div @click="clickTo(9)">{{field[9]}}</div>
+        </div>
+      </div>
     </div>
 
+    <div id="alert"></div>
     <script src="js.js"></script>
 </body>
 </html>

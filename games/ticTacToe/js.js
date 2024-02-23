@@ -82,10 +82,13 @@ createApp({
         },
         stopGame(message) {
             this.appIsReload = true;
+            const alertDiv = document.querySelector('#alert');
             setTimeout(() => {
-                alert (message);
+              alertDiv.textContent = message
+              alertDiv.style.visibility = 'visible'
             }, 1)
             setTimeout(() => {
+              alertDiv.style.visibility = 'hidden'
                 this.field = [];
                 this.appIsReload = false;
             }, 1000)
