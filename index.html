@@ -19,6 +19,7 @@
                     <div class="card-body">
                         <h5 class="card-title text-center">{{gameCard.title}}</h5>
                         <p class="card-text">{{gameCard.description}}</p>
+                        <p class="small text-black-50 text-center">Created in <span>{{gameCard.year}}</span></p>
                         <div class="text-center">
                             <a :href="`./games/${gameCard.link}/index.html`" target="_blank" class="btn btn-primary">Play</a>
                         </div>
@@ -41,21 +42,25 @@
                         title: 'TicTacToe',
                         description: '',
                         link: 'ticTacToe',
+                        year: 2017
                     },
                     {
                         title: 'Snake',
                         description: '',
                         link: 'snake',
+                        year: 2018
                     },
                     {
                         title: 'Balloon',
                         description: '',
                         link: 'balloon',
+                        year: 2018
                     },
                     {
                         title: 'BarleyBreak',
                         description: '',
                         link: 'barleyBreak',
+                        year: 2016
                     },
                 ]
             }
